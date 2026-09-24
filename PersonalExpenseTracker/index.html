@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Personal Expense Tracker dashboard for managing spending, categories, and monthly insights."
+    />
+    <title>Personal Expense Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-wrap">
+          <div class="brand-badge">P</div>
+          <div>
+            <p class="brand-kicker">Finance</p>
+            <h2>ExpenseFlow</h2>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Main navigation">
+          <button class="nav-item active" type="button">
+            <span>Overview</span>
+          </button>
+          <button class="nav-item" type="button">
+            <span>Transactions</span>
+          </button>
+          <button class="nav-item" type="button">
+            <span>Budgets</span>
+          </button>
+          <button class="nav-item" type="button">
+            <span>Insights</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-card">
+          <p>Monthly target</p>
+          <h3 id="budgetValue">$4,200</h3>
+          <div class="progress-track">
+            <span id="budgetProgress" class="progress-fill"></span>
+          </div>
+          <small id="budgetStatus">$1,580 left to spend</small>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h1>Personal Expense Tracker</h1>
+          </div>
+
+          <div class="topbar-actions">
+            <button class="ghost-button" id="themeToggle" type="button" aria-label="Toggle theme">
+              Light mode
+            </button>
+          </div>
+        </header>
+
+        <section class="summary-grid" aria-label="Expense summary">
+          <article class="summary-card accent">
+            <div class="card-head">
+              <span>Total spend</span>
+              <span class="chip success">+8.4%</span>
+            </div>
+            <h2 id="totalSpend">$0.00</h2>
+            <small>This month</small>
+          </article>
+
+          <article class="summary-card">
+            <div class="card-head">
+              <span>Average</span>
+              <span class="chip neutral">Per item</span>
+            </div>
+            <h2 id="avgSpend">$0.00</h2>
+            <small>Average expense</small>
+          </article>
+
+          <article class="summary-card">
+            <div class="card-head">
+              <span>Largest</span>
+              <span class="chip warning">Top</span>
+            </div>
+            <h2 id="largestSpend">$0.00</h2>
+            <small>Biggest purchase</small>
+          </article>
+
+          <article class="summary-card">
+            <div class="card-head">
+              <span>Remaining</span>
+              <span class="chip danger">Budget</span>
+            </div>
+            <h2 id="remainingSpend">$0.00</h2>
+            <small>Available balance</small>
+          </article>
+        </section>
+
+        <section class="layout-grid">
+          <div class="panel add-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Quick add</p>
+                <h3>Add new expense</h3>
+              </div>
+            </div>
+
+            <form id="expenseForm" class="expense-form">
+              <div class="form-row two-columns">
+                <label>
+                  <span>Title</span>
+                  <input id="titleInput" name="title" type="text" placeholder="Groceries, rent, travel..." required />
+                </label>
+                <label>
+                  <span>Category</span>
+                  <select id="categoryInput" name="category">
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Housing">Housing</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Health">Health</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="form-row two-columns">
+                <label>
+                  <span>Amount</span>
+                  <input id="amountInput" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required />
+                </label>
+                <label>
+                  <span>Date</span>
+                  <input id="dateInput" name="date" type="date" required />
+                </label>
+              </div>
+
+              <button class="primary-button" type="submit">Add expense</button>
+            </form>
+          </div>
+
+          <div class="panel chart-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Breakdown</p>
+                <h3>Category spend</h3>
+              </div>
+            </div>
+            <div id="categoryBreakdown" class="category-list" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="panel list-panel">
+          <div class="panel-header list-header">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h3>Recent transactions</h3>
+            </div>
+
+            <div class="toolbar">
+              <input id="searchInput" type="search" placeholder="Search title or category" aria-label="Search expenses" />
+              <div class="filter-pills" id="filterPills" aria-label="Filter by category"></div>
+            </div>
+          </div>
+
+          <div id="expenseList" class="expense-list" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
