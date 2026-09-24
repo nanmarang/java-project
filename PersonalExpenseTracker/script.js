@@ -23,6 +23,8 @@ const filterPills = document.getElementById("filterPills");
 const searchInput = document.getElementById("searchInput");
 const themeToggle = document.getElementById("themeToggle");
 const toast = document.getElementById("toast");
+const navButtons = document.querySelectorAll(".nav-item");
+const insightsSection = document.getElementById("insightsSection");
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat("en-US", {
@@ -84,11 +86,27 @@ function renderSummary() {
     { amount: 0 }
   );
   const remaining = budgetLimit - total;
+  const categoryTotals = {};
+
+  state.entries.forEach((entry) => {
+    const key = entry.category;
+    categoryTotals[key] = (categoryTotals[key] || 0) + Number(entry.amount);
+  });
 
   updateMetric("totalSpend", formatCurrency(total));
   updateMetric("avgSpend", formatCurrency(average));
   updateMetric("largestSpend", formatCurrency(largest.amount || 0));
   updateMetric("remainingSpend", formatCurrency(remaining));
+  updateMetric("insightFood", formatCurrency(categoryTotals.Food || 0));
+  updateMetric("insightHousing", formatCurrency(categoryTotals.Housing || 0));
+  updateMetric("insightTransport", formatCurrency(categoryTotals.Transport || 0));
+  updateMetric("insightOther", formatCurrency(
+    (categoryTotals.Other || 0) +
+      (categoryTotals.Shopping || 0) +
+      (categoryTotals.Entertainment || 0) +
+      (categoryTotals.Health || 0) +
+      (categoryTotals.Bills || 0)
+  ));
 
   const progress = Math.min((total / budgetLimit) * 100, 100);
   const budgetProgress = document.getElementById("budgetProgress");
@@ -251,6 +269,31 @@ function toggleTheme() {
   localStorage.setItem("expenseflow-theme", nextTheme);
   themeToggle.textContent = nextTheme === "dark" ? "Light mode" : "Dark mode";
 }
+
+function setActiveNav(targetId) {
+  navButtons.forEach((button) => {
+    const isActive = button.dataset.target === targetId;
+    button.classList.toggle("active", isActive);
+  });
+}
+
+function handleNavClick(event) {
+  const targetId = event.currentTarget.dataset.target;
+  setActiveNav(targetId);
+
+  const section = document.getElementById(targetId);
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  if (insightsSection && targetId === "insightsSection") {
+    insightsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+navButtons.forEach((button) => {
+  button.addEventListener("click", handleNavClick);
+});
 
 form.addEventListener("submit", handleSubmit);
 searchInput.addEventListener("input", (event) => {
